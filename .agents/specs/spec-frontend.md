@@ -1,4 +1,4 @@
-# Especificação Técnica v2.2 — Frontend Premium: SISTEMA FINANCEIRO
+# Especificação Técnica v2.3 — Frontend Premium: SISTEMA FINANCEIRO
 
 **Bíblia Visual de Referência:** *Helios Investments Dashboard (media_1790431118067.png)*  
 **Stack:** Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS, Lucide Icons  
@@ -41,10 +41,12 @@ A imagem de referência dita todas as regras estéticas e estruturais desta nova
   - Avatar e Perfil do Usuário com inicial dinâmica, nome e badge *"Conta Ativa"*, linkando diretamente para `/perfil`.
   - Botão de Logout com limpeza de cookies HttpOnly e sessão.
 
-### 1.4 Footer Global Estruturado
-- Rodapé refinado na base do shell:
-  - Status da conexão com o backend em tempo real (*"🟢 API Conectada"*).
-  - Resumo de métricas de versão, termos de privacidade e copyright.
+### 1.4 Footer Global Estruturado com Health Check Real
+- Rodapé refinado na base do shell com polling dinâmico de status da API (`GET /health`):
+  - `🟢 API Conectada (Xms)` quando operacional e responsiva.
+  - `🔴 API Desconectada` em caso de falha de conexão.
+  - `🟡 Verificando API...` durante a checagem.
+  - Resumo de versão, porta do backend e copyright.
 
 ---
 
@@ -54,24 +56,22 @@ O novo Dashboard é dividido em um grid modular com alto nível de detalhamento 
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ HEADER: Welcome, {Nome}  |  Navegador [Mês/Ano]  |  [+ Nova Transação]  |  Avatar      │
+│ HEADER: Bem-vindo(a), {Nome} | Navegador [Mês/Ano] | [Exportar PDF] | [+ Nova Transação]│
 ├────────────────────────────────────────────────────────────────────────────────────────┤
-│ TABS DE FILTRO RÁPIDO: [ Visão Geral ]  [ Entradas ]  [ Saídas ]  [ Cartões ]          │
-├────────────────────────────────────────┬─────────────────────────┬─────────────────────┤
-│ 1. TOTAL HOLDING (SALDO & PATRIMÔNIO)  │ 2. WATCHLIST / GASTOS   │ 3. MEUS CARTÕES     │
-│    - Saldo Atual (Feedback Cromático)  │    POR CATEGORIA        │    - Mini-cards de  │
-│    - Entradas vs Saídas do Mês         │    - Top despesas       │      crédito com    │
-│    - Card com Backlight Glow Neon      │    - Badges de variação │      bandeira, nome │
-│      ("Insights Financeiros")          │    - Filtro: Maior/Menor│      e limite/gasto │
-├────────────────────────────────────────┴─────────────────────────┴─────────────────────┤
-│ 4. PORTFOLIO PERFORMANCE / EVOLUÇÃO TEMPORAL (GRÁFICO COM GLOW)                       │
-│    - Área ampla com curva fluida neon (placeholder SVG estilizado idêntico ao print)   │
-│    - Tooltip com ponto focal iluminado (data, valor e % variação)                      │
-│    - Controles de escala em pílulas: [ 1D ] [ 1W ] [ 1M ] [ 6M ] [ 1Y ]                │
+│ 1. SALDO CONSOLIDADO (TOTAL HOLDING)  │ 2. GASTOS POR CATEGORIA │ 3. MEUS CARTÕES     │
+│    - Saldo Real (Feedback Cromático)  │    - Participação % real│    - Mini-cards de  │
+│    - Entradas vs Saídas do Mês        │    - Sem dados fictícios│      crédito com    │
+│    - Card com Backlight Glow Neon     │    - Abas: Maiores/Menor│      bandeira real  │
+│      ("Decisões com IA" -> /ia-insights)                        │    - Link 'Ver todos│
+├───────────────────────────────────────┴─────────────────────────┴─────────────────────┤
+│ 4. EVOLUÇÃO DO SALDO (GRÁFICO COM CURVA BÉZIER MATEMÁTICA REAL)                       │
+│    - Curva SVG fluida que sobe no superávit e desce no déficit real do usuário        │
+│    - Tooltip interativo por mês (saldo acumulado, diferença líquida em R$)            │
+│    - Controles de escala em pílulas: [ 1D ] [ 1S ] [ 1M ] [ 6M ] [ 1A ]               │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
-│ 5. TRANSAÇÕES RECENTES / PRÓXIMOS VENCIMENTOS                                          │
-│    - Tabela moderna com badges de status (Pago / Pendente), método (PIX/Cartão),       │
-│      avatar da categoria e ação rápida de toggle-pago.                                 │
+│ 5. TRANSAÇÕES RECENTES                                                                 │
+│    - Tabela moderna com dados reais unificados de receitas e despesas.                 │
+│    - Toggle instantâneo de status (Pago / Pendente).                                   │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 

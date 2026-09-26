@@ -15,6 +15,28 @@ interface CardItem {
   criadoEm: string;
 }
 
+const INSTITUICOES_FINANCEIRAS = [
+  'Nubank',
+  'Banco Inter',
+  'Itaú',
+  'Bradesco',
+  'Santander',
+  'Banco do Brasil',
+  'Caixa Econômica',
+  'C6 Bank',
+  'BTG Pactual',
+  'XP Investimentos',
+  'PicPay',
+  'Mercado Pago',
+  'Banco Pan',
+  'Neon',
+  'Next',
+  'Sicoob',
+  'Sicredi',
+  'Safra',
+  'Outra Instituição',
+];
+
 export default function CartoesPage() {
   const [cards, setCards] = useState<CardItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +44,8 @@ export default function CartoesPage() {
 
   // Form State
   const [nome, setNome] = useState('');
-  const [instituicaoFinanceira, setInstituicaoFinanceira] = useState('');
+  const [instituicaoFinanceira, setInstituicaoFinanceira] = useState(INSTITUICOES_FINANCEIRAS[0]);
+  const [outraInstituicao, setOutraInstituicao] = useState('');
   const [ultimosDigitos, setUltimosDigitos] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -40,7 +63,11 @@ export default function CartoesPage() {
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
-    if (!nome.trim() || !instituicaoFinanceira.trim()) return;
+    const instFinal = instituicaoFinanceira === 'Outra Instituição'
+      ? (outraInstituicao.trim() || 'Outra')
+      : instituicaoFinanceira;
+
+    if (!nome.trim() || !instFinal.trim()) return;
 
     setSubmitting(true);
     try {
@@ -48,50 +75,51 @@ export default function CartoesPage() {
         method: 'POST',
         body: JSON.stringify({
           nome,
-          instituicaoFinanceira,
+          instituicaoFinanceira: instFinal,
           ultimosDigitos: ultimosDigitos.trim() || undefined,
         }),
       });
 
       setModalOpen(false);
       setNome('');
-      setInstituicaoFinanceira('');
+      setInstituicaoFinanceira(INSTITUICOES_FINANCEIRAS[0]);
+      setOutraInstituicao('');
       setUltimosDigitos('');
       loadCards();
     } catch (err: any) {
-      alert(err.message || 'Erro ao cadastrar cartão');
+      alert(err.message || 'Erro ao criar cartão');
     } finally {
       setSubmitting(false);
     }
   }
 
   async function handleDelete(id: string) {
-    if (!confirm('Excluir este cartão? (O histórico de despesas continuará salvo)')) return;
+    if (!confirm('Deseja realmente excluir este cartão?')) return;
     try {
       await apiClient(`/cards/${id}`, { method: 'DELETE' });
       loadCards();
     } catch (err: any) {
-      alert(err.message || 'Erro ao excluir');
+      alert(err.message || 'Erro ao excluir cartão');
     }
   }
 
   return (
     <div className="space-y-6">
-      {/* Header com métricas no padrão da referência */}
+      {/* Header da Página */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-            <span>Meus Cartões & Carteira</span>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-400 font-semibold border border-purple-500/20">
-              {cards.length} Ativos
-            </span>
-          </h2>
+          <h2 className="text-xl font-bold tracking-tight text-white">Meus Cartões</h2>
           <p className="text-xs text-zinc-500 mt-0.5">
-            Gerencie limites e vincule despesas diretamente aos seus cartões
+            Gerencie seus cartões de crédito e débito vinculados
           </p>
         </div>
 
-        <Button variant="glow" size="sm" onClick={() => setModalOpen(true)}>
+        <Button
+          variant="glow"
+          size="sm"
+          onClick={() => setModalOpen(true)}
+          className="shadow-glow-neon"
+        >
           <PlusCircle className="w-3.5 h-3.5" />
           <span>Novo Cartão</span>
         </Button>
@@ -103,8 +131,20 @@ export default function CartoesPage() {
           <span className="text-xs">Carregando carteira de cartões...</span>
         </div>
       ) : cards.length === 0 ? (
-        <Card className="text-center py-20 text-zinc-500 text-xs bg-[#14141b] border-white/[0.06]">
-          Nenhum cartão cadastrado ainda. Clique em &quot;Novo Cartão&quot; para adicionar.
+        <Card className="bg-[#14141b] border-white/[0.06] p-12 text-center">
+          <CreditCard className="w-10 h-10 mx-auto text-zinc-600 mb-3" />
+          <h3 className="text-sm font-semibold text-zinc-200">Nenhum cartão cadastrado</h3>
+          <p className="text-xs text-zinc-500 mt-1 max-w-sm mx-auto">
+            Cadastre seus cartões para acompanhar faturas e organizar seus gastos mensais com clareza.
+          </p>
+          <Button
+            variant="glow"
+            size="sm"
+            onClick={() => setModalOpen(true)}
+            className="mt-5"
+          >
+            Cadastrar Primeiro Cartão
+          </Button>
         </Card>
       ) : (
         /* Galeria Neomorphic Dark estilo Apple Wallet */
@@ -173,13 +213,33 @@ export default function CartoesPage() {
                 required
               />
 
-              <Input
-                label="Instituição Financeira"
-                placeholder="Ex: Nubank, Itaú, Bradesco, Inter"
-                value={instituicaoFinanceira}
-                onChange={(e) => setInstituicaoFinanceira(e.target.value)}
-                required
-              />
+              {/* Seleção Padronizada de Instituição Financeira */}
+              <div className="space-y-1.5 text-left">
+                <label className="text-xs font-medium text-zinc-300">
+                  Instituição Financeira
+                </label>
+                <select
+                  value={instituicaoFinanceira}
+                  onChange={(e) => setInstituicaoFinanceira(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-2xl bg-[#0f0f13] border border-white/[0.08] text-xs text-zinc-200 focus:outline-none focus:border-purple-500/50 cursor-pointer"
+                >
+                  {INSTITUICOES_FINANCEIRAS.map((inst) => (
+                    <option key={inst} value={inst} className="bg-[#14141b] text-white">
+                      {inst}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {instituicaoFinanceira === 'Outra Instituição' && (
+                <Input
+                  label="Nome da Outra Instituição"
+                  placeholder="Informe o banco emissor"
+                  value={outraInstituicao}
+                  onChange={(e) => setOutraInstituicao(e.target.value)}
+                  required
+                />
+              )}
 
               <Input
                 label="Últimos 4 Dígitos (Opcional)"
