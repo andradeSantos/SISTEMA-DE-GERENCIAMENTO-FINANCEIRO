@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
-import { ArrowUpRight, CreditCard } from 'lucide-react';
+import { ArrowUpRight, CreditCard, PlusCircle } from 'lucide-react';
 
 interface CardItem {
   id: string;
@@ -11,53 +11,64 @@ interface CardItem {
 }
 
 export function CardsPreviewWidget({ cards = [] }: { cards?: CardItem[] }) {
-  const defaultCards: CardItem[] = cards.length > 0 ? cards : [
-    { id: '1', nome: 'Nubank Ultravioleta', instituicaoFinanceira: 'Nubank', ultimosDigitos: '4892' },
-    { id: '2', nome: 'Inter Black', instituicaoFinanceira: 'Inter', ultimosDigitos: '1042' },
-    { id: '3', nome: 'Itaú Personalité', instituicaoFinanceira: 'Itaú', ultimosDigitos: '7721' },
-    { id: '4', nome: 'C6 Carbon', instituicaoFinanceira: 'C6 Bank', ultimosDigitos: '9934' },
-  ];
-
   return (
     <Card className="bg-[#14141b] border-white/[0.06] flex flex-col justify-between">
       <div>
         <div className="flex items-center justify-between mb-4">
-          <span className="text-sm font-bold text-white">Meus Cartões</span>
+          <div>
+            <span className="text-sm font-bold text-white">Meus Cartões</span>
+            <span className="block text-[10px] text-zinc-500">
+              {cards.length} {cards.length === 1 ? 'cartão ativo' : 'cartões ativos'}
+            </span>
+          </div>
           
           <Link
             href="/cartoes"
             className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] text-xs text-zinc-300 font-medium transition-colors"
           >
-            <span>See all</span>
+            <span>Ver todos</span>
             <ArrowUpRight className="w-3.5 h-3.5 text-zinc-400" />
           </Link>
         </div>
 
-        {/* Grid 2x2 Idêntico à Referência Visual */}
-        <div className="grid grid-cols-2 gap-3 mt-2">
-          {defaultCards.slice(0, 4).map((c, i) => (
-            <div
-              key={c.id || i}
-              className="p-3.5 rounded-2xl bg-[#0f0f13] border border-white/[0.05] hover:border-purple-500/30 transition-all flex flex-col justify-between min-h-[92px]"
+        {cards.length === 0 ? (
+          <div className="py-8 text-center text-zinc-500 space-y-2">
+            <CreditCard className="w-6 h-6 mx-auto text-zinc-600" />
+            <p className="text-xs">Nenhum cartão cadastrado ainda.</p>
+            <Link
+              href="/cartoes"
+              className="inline-flex items-center gap-1 text-[11px] text-purple-400 hover:text-purple-300 font-medium"
             >
-              <div>
-                <span className="block text-[11px] font-semibold text-zinc-200 truncate">
-                  {c.nome}
-                </span>
-                <span className="block text-[10px] text-zinc-500">
-                  {c.instituicaoFinanceira}
-                </span>
-              </div>
+              <PlusCircle className="w-3 h-3" />
+              <span>Cadastrar meu primeiro cartão</span>
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-3 mt-2">
+            {cards.slice(0, 4).map((c) => (
+              <div
+                key={c.id}
+                className="p-3.5 rounded-2xl bg-[#0f0f13] border border-white/[0.05] hover:border-purple-500/30 transition-all flex flex-col justify-between min-h-[92px]"
+              >
+                <div>
+                  <span className="block text-[11px] font-semibold text-zinc-200 truncate">
+                    {c.nome}
+                  </span>
+                  <span className="block text-[10px] text-zinc-500 truncate">
+                    {c.instituicaoFinanceira}
+                  </span>
+                </div>
 
-              <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/[0.03]">
-                <span className="text-[10px] font-mono text-zinc-400">
-                  •••• {c.ultimosDigitos || '0000'}
-                </span>
-                <CreditCard className="w-3.5 h-3.5 text-purple-400" />
+                <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/[0.03]">
+                  <span className="text-[10px] font-mono text-zinc-400">
+                    •••• {c.ultimosDigitos || '••••'}
+                  </span>
+                  <CreditCard className="w-3.5 h-3.5 text-purple-400" />
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </Card>
   );

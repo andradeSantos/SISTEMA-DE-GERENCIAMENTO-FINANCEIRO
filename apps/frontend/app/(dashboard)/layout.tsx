@@ -17,7 +17,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="flex-1 flex flex-col justify-between p-6 sm:p-8 overflow-y-auto">
           <Suspense fallback={<div className="py-20 text-center text-xs text-zinc-500">Carregando painel...</div>}>
             <div>
-              <Header userName="Nadia" />
+              <Header />
               <main className="mt-6">
                 {children}
               </main>

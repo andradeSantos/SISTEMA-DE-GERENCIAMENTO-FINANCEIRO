@@ -26,9 +26,32 @@ export type ProximoVencimento = {
   categoria: string;
 };
 
+export type EvolucaoMensal = {
+  mes: string;
+  mesNumero: number;
+  receitas: number;
+  despesas: number;
+  saldo: number;
+  saldoAcumulado: number;
+};
+
+export type TransacaoRecente = {
+  id: string;
+  tipo: 'receita' | 'despesa';
+  descricao: string;
+  categoria: string;
+  valor: number;
+  data: string;
+  pago: boolean;
+  metodo?: string;
+  cartao?: string | null;
+};
+
 export type DashboardResponse = {
   resumo: DashboardResumo;
   gastosPorCategoria: GastoPorCategoria[];
   gastosPorCartao: GastoPorCartao[];
   proximosVencimentos: ProximoVencimento[];
+  evolucaoMensal?: EvolucaoMensal[];
+  transacoesRecentes?: TransacaoRecente[];
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { formatCurrency } from '@/lib/utils';
-import { ChevronDown, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
 
 export interface TotalHoldingCardProps {
   saldo: number;
@@ -16,11 +16,10 @@ export function TotalHoldingCard({ saldo, totalReceitas, totalDespesas }: TotalH
     <Card className="flex flex-col justify-between bg-[#14141b] border-white/[0.06]">
       <div>
         <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-zinc-400">Total Holding</span>
-          <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/[0.06] text-xs text-zinc-300">
-            <span>6M</span>
-            <ChevronDown className="w-3 h-3 text-zinc-500" />
-          </div>
+          <span className="text-xs font-medium text-zinc-400">Saldo Consolidado</span>
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.06] text-[11px] text-zinc-300">
+            Mês Vigente
+          </span>
         </div>
 
         <div className="mt-5">
@@ -32,7 +31,9 @@ export function TotalHoldingCard({ saldo, totalReceitas, totalDespesas }: TotalH
             {formatCurrency(saldo)}
           </div>
           <p className="mt-1 text-xs text-zinc-500">
-            {isPositive ? '+8.4% em relação ao mês anterior' : '-3.2% despesas excedentes'}
+            {isPositive
+              ? 'Superávit financeiro acumulado no período'
+              : 'Déficit no fluxo de caixa do período'}
           </p>
         </div>
       </div>

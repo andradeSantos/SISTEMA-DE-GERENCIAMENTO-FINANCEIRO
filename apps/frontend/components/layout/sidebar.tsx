@@ -8,6 +8,7 @@ import {
   TrendingUp, 
   TrendingDown, 
   CreditCard, 
+  User,
   Settings, 
   HelpCircle,
   Layers
@@ -22,11 +23,12 @@ export function Sidebar() {
     { label: 'Rendas', href: '/rendas', icon: TrendingUp },
     { label: 'Gastos', href: '/gastos', icon: TrendingDown },
     { label: 'Cartões', href: '/cartoes', icon: CreditCard },
+    { label: 'Perfil', href: '/perfil', icon: User },
   ];
 
   const bottomNavItems = [
-    { label: 'Configurações', href: '/configuracoes', icon: Settings },
-    { label: 'Suporte', href: '/suporte', icon: HelpCircle },
+    { label: 'Configurações', href: '/perfil', icon: Settings },
+    // { label: 'Suporte', href: '/ia-insights', icon: HelpCircle },
   ];
 
   return (

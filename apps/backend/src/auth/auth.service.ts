@@ -54,6 +54,56 @@ export class AuthService {
     return { accessToken: token, user: { id: user.id, nome: user.nome, email: user.email } };
   }
 
+  async getProfile(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        criadoEm: true,
+        _count: {
+          select: {
+            cartoes: true,
+            rendas: true,
+            gastos: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('Usuário não encontrado');
+    }
+
+    return user;
+  }
+
+  async updateProfile(userId: string, data: { nome?: string; senha?: string }) {
+    const updateData: { nome?: string; senha?: string } = {};
+
+    if (data.nome && data.nome.trim()) {
+      updateData.nome = data.nome.trim();
+    }
+
+    if (data.senha && data.senha.trim()) {
+      updateData.senha = await bcrypt.hash(data.senha.trim(), 10);
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id: userId },
+      data: updateData,
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        criadoEm: true,
+      },
+    });
+
+    return updatedUser;
+  }
+
   private generateToken(userId: string, email: string): string {
     return this.jwtService.sign({ sub: userId, email });
   }

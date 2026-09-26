@@ -1,4 +1,4 @@
-# Especificação Técnica v2.1 — Frontend Premium: SISTEMA FINANCEIRO
+# Especificação Técnica v2.2 — Frontend Premium: SISTEMA FINANCEIRO
 
 **Bíblia Visual de Referência:** *Helios Investments Dashboard (media_1790431118067.png)*  
 **Stack:** Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS, Lucide Icons  
@@ -12,34 +12,34 @@ A imagem de referência dita todas as regras estéticas e estruturais desta nova
 
 ### 1.1 Paleta de Cores e Atmosfera Dark Mode
 - **Canvas / Background Externo:** `#0a0a0c` com iluminação ambiente e reflexos volumétricos escuros.
-- **Painel Principal / Shell Envolvente:** Card gigante com borda muito suave (`rounded-[32px]`), background `#0f0f13` e borda translúcida sutil (`border border-white/[0.06]`).
+- **Painel Principal / Shell Envolvente:** Card gigante com borda muito suave (`rounded-[28px] sm:rounded-[36px]`), background `#0f0f13` e borda translúcida sutil (`border border-white/[0.06]`).
 - **Cards e Superfícies Internas:** `#14141b` a `#181822`, cantos arredondados (`rounded-2xl` a `rounded-3xl`), sombra profunda e borda delicada (`border border-white/[0.05]`).
 - **Gradients Neon & Glow (Assinatura Visual):**
   - **Gradiente Primário:** Roxo magenta para rosa neon (`linear-gradient(135deg, #a855f7 0%, #ec4899 100%)`).
-  - **Luz Volumétrica de Fundo (Backlight Glow):** Efeito de domo iluminado (radial blur) emergindo de trás de cards e botões interativos (ex: botão *Explore AI Insights* da referência).
+  - **Luz Volumétrica de Fundo (Backlight Glow):** Efeito de domo iluminado (radial blur) emergindo de trás de cards e botões interativos (ex: botão *Explorar Insights de IA*).
   - **Sombra Glow Neon:** `box-shadow: 0 0 25px -4px rgba(236, 72, 153, 0.4)`.
 
-### 1.2 Sidebar (Menu Lateral Idêntico à Referência)
+### 1.2 Sidebar (Menu Lateral Idêntico à Referência em Português)
 - **Localização:** Coluna fixa à esquerda integrada ao shell escuro.
-- **Logo / Header da Sidebar:** Ícone geométrico duplo estilizado + Nome da Aplicação (*App Finance*).
+- **Logo / Header da Sidebar:** Ícone geométrico estilizado + Nome da Aplicação (*App Finance*).
 - **Item Ativo (Pill Neon Glow):** 
   - Fundo em pílula larga com gradiente roxo/rosa suave translúcido (`bg-gradient-to-r from-purple-900/40 via-pink-900/20 to-transparent`).
-  - Borda luminosa sutil e contorno em pílula (`rounded-2xl` ou `rounded-full`).
+  - Borda luminosa sutil e contorno em pílula (`rounded-2xl`).
   - Ícone e texto em branco de alto contraste (`text-white font-medium`).
 - **Itens Inativos:** Ícone discreto + texto em tom de cinza neutro (`text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.03] transition-all`).
-- **Seção Superior:** *Visão Geral (Dashboard)*, *Rendas (Incomes)*, *Gastos (Expenses)*, *Cartões (Cards)*, *Relatórios (Reports)*.
-- **Seção Inferior (Fixa):** *Configurações (Settings)* e *Suporte (Support)* com divisória transparente.
+- **Seção Superior:** *Dashboard* (`/`), *Rendas* (`/rendas`), *Gastos* (`/gastos`), *Cartões* (`/cartoes`), *Perfil* (`/perfil`).
+- **Seção Inferior (Fixa):** *Configurações* (`/perfil`) e *Suporte* (`/ia-insights`) com divisória transparente.
 
-### 1.3 Cabeçalho Dinâmico (Header Superior)
+### 1.3 Cabeçalho Dinâmico (Header Superior 100% Real em Português)
 - **Saudação Personalizada (Esquerda):**
-  - Título proeminente: `Welcome, {Nome do Usuário}` (com gradiente sutil ou tom rosa suave no nome).
-  - Subtítulo: *"Aqui está a visão consolidada das suas finanças este mês"*.
+  - Título proeminente: `Bem-vindo(a), {user.nome}` consumido da API (`/auth/me`).
+  - Subtítulo: *"Aqui está a visão geral do seu patrimônio e finanças"*.
 - **Controles Centrais/Direita:**
-  - Navegador de meses em formato de pílulas agrupadas (`Pill Buttons`).
-  - Barra de busca rápida minimalista (*"Buscar transações, categorias..."*).
+  - Navegador de meses em formato de pílulas agrupadas ([`MonthNavigator`](file:///c:/Users/Renatchinha/OneDrive/Documentos/Documentos/Documentos/Rafael%20Andrade/appFinance/apps/frontend/components/dashboard/month-navigator.tsx)).
+  - Barra de busca rápida (*"Buscar transações..."*).
   - Botão de Notificações com badge discreto.
-  - Perfil do Usuário com avatar circular, nome e e-mail em tipografia compacta.
-  - Botão de Ação Primária em destaque Neon Glow: **`+ Nova Transação`**.
+  - Avatar e Perfil do Usuário com inicial dinâmica, nome e badge *"Conta Ativa"*, linkando diretamente para `/perfil`.
+  - Botão de Logout com limpeza de cookies HttpOnly e sessão.
 
 ### 1.4 Footer Global Estruturado
 - Rodapé refinado na base do shell:

@@ -63,6 +63,71 @@ export class DashboardService {
       take: 10,
     });
 
+    // Evolução dos 12 meses do ano selecionado para alimentar o gráfico dinâmico
+    const inicioAno = new Date(ano, 0, 1);
+    const fimAno = new Date(ano, 11, 31, 23, 59, 59);
+    const anoFilter = { gte: inicioAno, lte: fimAno };
+
+    const [todasRendasAno, todosGastosAno] = await Promise.all([
+      this.prisma.income.findMany({
+        where: { usuarioId: userId, dataRecebimento: anoFilter },
+      }),
+      this.prisma.expense.findMany({
+        where: { usuarioId: userId, dataPagamento: anoFilter },
+      }),
+    ]);
+
+    const mesesLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+    let acumulado = 0;
+    const evolucaoMensal = mesesLabels.map((mesLabel, idx) => {
+      const mesIdx = idx;
+      const receitasMes = todasRendasAno
+        .filter(r => new Date(r.dataRecebimento).getMonth() === mesIdx)
+        .reduce((sum, r) => sum + Number(r.valor), 0);
+      const despesasMes = todosGastosAno
+        .filter(g => new Date(g.dataPagamento).getMonth() === mesIdx)
+        .reduce((sum, g) => sum + Number(g.valor), 0);
+      const saldoMes = Math.round((receitasMes - despesasMes) * 100) / 100;
+      acumulado = Math.round((acumulado + saldoMes) * 100) / 100;
+
+      return {
+        mes: mesLabel,
+        mesNumero: mesIdx + 1,
+        receitas: Math.round(receitasMes * 100) / 100,
+        despesas: Math.round(despesasMes * 100) / 100,
+        saldo: saldoMes,
+        saldoAcumulado: acumulado,
+      };
+    });
+
+    // Transações Recentes reais (unindo rendas e despesas do período)
+    const ultimasRendas = rendas.map(r => ({
+      id: r.id,
+      tipo: 'receita' as const,
+      descricao: r.descricao,
+      categoria: r.categoria,
+      valor: Number(r.valor),
+      data: r.dataRecebimento.toISOString(),
+      pago: r.recebido,
+      metodo: 'Pix/Depósito',
+    }));
+
+    const ultimosGastos = gastos.map(g => ({
+      id: g.id,
+      tipo: 'despesa' as const,
+      descricao: g.totalParcelas > 1 ? `${g.descricao} (${g.parcelaAtual}/${g.totalParcelas})` : g.descricao,
+      categoria: g.categoria,
+      valor: Number(g.valor),
+      data: g.dataPagamento.toISOString(),
+      pago: g.pago,
+      metodo: g.metodoPagamento,
+      cartao: g.cartao?.nome,
+    }));
+
+    const transacoesRecentes = [...ultimasRendas, ...ultimosGastos]
+      .sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())
+      .slice(0, 10);
+
     return {
       resumo: {
         totalReceitas: Math.round(totalReceitas * 100) / 100,
@@ -84,6 +149,8 @@ export class DashboardService {
         data: v.dataPagamento,
         categoria: v.categoria,
       })),
+      evolucaoMensal,
+      transacoesRecentes,
     };
   }
 }
