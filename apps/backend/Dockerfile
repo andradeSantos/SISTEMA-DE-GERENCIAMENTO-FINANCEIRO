@@ -23,6 +23,7 @@ COPY apps/backend/ ./apps/backend/
 # Gera o client do Prisma e compila o shared + backend
 RUN npx prisma generate --schema=./packages/database/prisma/schema.prisma
 RUN npm run build --workspace=@app-finance/shared
+RUN npm run build --workspace=@app-finance/database
 RUN npm run build --workspace=backend
 
 # -------------------------------------------------------------
