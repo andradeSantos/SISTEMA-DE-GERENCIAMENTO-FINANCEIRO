@@ -16,6 +16,7 @@ RUN npm ci
 # Copia código-fonte
 COPY packages/ ./packages/
 COPY apps/frontend/ ./apps/frontend/
+RUN mkdir -p apps/frontend/public
 
 # Compila shared e Next.js
 RUN npm run build --workspace=@app-finance/shared
