@@ -44,7 +44,7 @@ export function Header() {
       localStorage.removeItem('user_profile');
       await Promise.all([
         fetch('/api/auth/logout', { method: 'POST' }),
-        fetch('http://localhost:4012/auth/logout', { method: 'POST', credentials: 'include' }).catch(() => {}),
+        apiClient('/auth/logout', { method: 'POST' }).catch(() => {}),
       ]);
       router.push('/sign-in');
       router.refresh();

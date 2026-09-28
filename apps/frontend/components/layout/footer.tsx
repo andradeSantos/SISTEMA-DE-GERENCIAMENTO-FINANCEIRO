@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { apiClient } from '@/services/api-client';
 
 export function Footer() {
   const [status, setStatus] = useState<'checking' | 'connected' | 'disconnected'>('checking');
@@ -12,22 +13,17 @@ export function Footer() {
     async function checkApiHealth() {
       const startTime = performance.now();
       try {
-        const res = await fetch('http://localhost:4012/health', {
+        await apiClient('/health', {
           method: 'GET',
           cache: 'no-store',
-        }).catch(() => null);
+        });
 
         const duration = Math.round(performance.now() - startTime);
 
         if (!isMounted) return;
 
-        if (res && res.ok) {
-          setStatus('connected');
-          setLatency(duration);
-        } else {
-          setStatus('disconnected');
-          setLatency(null);
-        }
+        setStatus('connected');
+        setLatency(duration);
       } catch {
         if (!isMounted) return;
         setStatus('disconnected');

@@ -37,7 +37,7 @@ services:
       JWT_EXPIRATION: ${JWT_EXPIRATION:-7d}
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost:4011}
     ports:
-      - "4012:4012"
+      - "127.0.0.1:4012:4012"
     networks:
       - app_network
 
@@ -46,6 +46,8 @@ services:
     build:
       context: .
       dockerfile: apps/frontend/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     container_name: app-finance-frontend
     restart: unless-stopped
     depends_on:
@@ -54,7 +56,7 @@ services:
       PORT: 4011
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4012}
     ports:
-      - "4011:4011"
+      - "127.0.0.1:4011:4011"
     networks:
       - app_network
 

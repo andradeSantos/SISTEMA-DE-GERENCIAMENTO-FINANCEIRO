@@ -19,6 +19,10 @@ COPY apps/frontend/ ./apps/frontend/
 
 # Compila shared e Next.js
 RUN npm run build --workspace=@app-finance/shared
+
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
 RUN npm run build --workspace=frontend
 
 # -------------------------------------------------------------
@@ -29,6 +33,7 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=4011
 
 # Usuário de sistema não-root
@@ -38,8 +43,8 @@ RUN addgroup --system --gid 1001 nodejs && \
 COPY --from=builder /app/package.json /app/package-lock.json ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/packages/ ./packages/
-COPY --from=builder /app/apps/frontend/.next ./apps/frontend/.next
-COPY --from=builder /app/apps/frontend/public ./apps/frontend/public
+COPY --from=builder --chown=nextjs:nodejs /app/apps/frontend/.next ./apps/frontend/.next
+COPY --from=builder --chown=nextjs:nodejs /app/apps/frontend/public ./apps/frontend/public
 COPY --from=builder /app/apps/frontend/package.json ./apps/frontend/package.json
 
 USER nextjs

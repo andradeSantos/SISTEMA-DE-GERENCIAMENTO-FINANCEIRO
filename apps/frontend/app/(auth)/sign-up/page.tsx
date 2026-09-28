@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Layers } from 'lucide-react';
+import { apiClient } from '@/services/api-client';
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -27,19 +28,10 @@ export default function SignUpPage() {
   async function onSubmit(data: RegisterDto) {
     setServerError(null);
     try {
-      const response = await fetch('http://localhost:4012/auth/register', {
+      const result = await apiClient<{ accessToken: string; user: any }>('/auth/register', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify(data),
       });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: 'Erro ao cadastrar' }));
-        throw new Error(errorData.message || 'Erro ao registrar usuário');
-      }
-
-      const result = await response.json();
 
       await fetch('/api/auth/set-cookie', {
         method: 'POST',

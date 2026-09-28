@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Layers } from 'lucide-react';
+import { apiClient } from '@/services/api-client';
 
 function SignInForm() {
   const router = useRouter();
@@ -29,19 +30,10 @@ function SignInForm() {
   async function onSubmit(data: LoginDto) {
     setServerError(null);
     try {
-      const response = await fetch('http://localhost:4012/auth/login', {
+      const result = await apiClient<{ accessToken: string; user: any }>('/auth/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify(data),
       });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: 'Credenciais inválidas' }));
-        throw new Error(errorData.message || 'Erro ao autenticar');
-      }
-
-      const result = await response.json();
 
       await fetch('/api/auth/set-cookie', {
         method: 'POST',
