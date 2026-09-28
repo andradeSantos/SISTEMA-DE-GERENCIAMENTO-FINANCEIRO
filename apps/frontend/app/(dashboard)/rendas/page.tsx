@@ -99,56 +99,56 @@ function RendasContent() {
 
   return (
     <div className="space-y-6">
-      {/* Header com métricas no padrão da referência */}
+      {/* Header com métricas */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+          <h2 className="text-xl font-bold tracking-tight theme-text-primary flex items-center gap-2 flex-wrap">
             <span>Rendas e Receitas</span>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-semibold border border-emerald-500/20">
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-semibold border border-emerald-500/20">
               +{formatCurrency(total)}
             </span>
           </h2>
-          <p className="text-xs text-zinc-500 mt-0.5">
+          <p className="text-xs theme-text-secondary mt-0.5">
             Total recebido: {formatCurrency(totalRecebido)} • Gestão mensal
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          {/* Filtros em Pílula Idênticos à Referência */}
-          <div className="inline-flex items-center gap-1 p-1 rounded-full bg-[#14141b] border border-white/[0.06]">
-            <PillButton active={filterStatus === 'all'} onClick={() => setFilterStatus('all')} className="px-3 py-1">
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Filtros em Pílula */}
+          <div className="inline-flex items-center gap-1 p-1 rounded-full theme-card-elevated border">
+            <PillButton active={filterStatus === 'all'} onClick={() => setFilterStatus('all')} className="px-2.5 sm:px-3 py-1">
               Todas
             </PillButton>
-            <PillButton active={filterStatus === 'recebido'} onClick={() => setFilterStatus('recebido')} className="px-3 py-1">
+            <PillButton active={filterStatus === 'recebido'} onClick={() => setFilterStatus('recebido')} className="px-2.5 sm:px-3 py-1">
               Recebidas
             </PillButton>
-            <PillButton active={filterStatus === 'pendente'} onClick={() => setFilterStatus('pendente')} className="px-3 py-1">
+            <PillButton active={filterStatus === 'pendente'} onClick={() => setFilterStatus('pendente')} className="px-2.5 sm:px-3 py-1">
               Pendentes
             </PillButton>
           </div>
 
-          <Button variant="glow" size="sm" onClick={() => setModalOpen(true)}>
+          <Button variant="primary" size="sm" onClick={() => setModalOpen(true)}>
             <PlusCircle className="w-3.5 h-3.5" />
             <span>Nova Renda</span>
           </Button>
         </div>
       </div>
 
-      {/* Tabela Dark Estilizada */}
-      <Card className="bg-[#14141b] border-white/[0.06] p-0 overflow-hidden">
+      {/* Tabela com Scroll Touch */}
+      <Card className="p-0 overflow-hidden">
         {loading ? (
-          <div className="flex items-center justify-center py-20 text-zinc-500">
-            <Loader2 className="w-5 h-5 animate-spin text-purple-400 mr-2" />
+          <div className="flex items-center justify-center py-20 theme-text-muted">
+            <Loader2 className="w-5 h-5 animate-spin theme-text-secondary mr-2" />
             <span className="text-xs">Carregando receitas...</span>
           </div>
         ) : filteredIncomes.length === 0 ? (
-          <div className="text-center py-20 text-zinc-500 text-xs">
+          <div className="text-center py-20 theme-text-muted text-xs">
             Nenhuma receita encontrada para os filtros selecionados.
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-white/[0.06] bg-white/[0.02] text-zinc-400 uppercase tracking-wider text-[10px]">
+          <div className="overflow-x-auto scrollbar-thin">
+            <table className="w-full text-left text-xs min-w-[620px]">
+              <thead className="border-b theme-border theme-text-secondary uppercase tracking-wider text-[10px]">
                 <tr>
                   <th className="py-3 px-4">Descrição</th>
                   <th className="py-3 px-4">Categoria</th>
@@ -158,44 +158,44 @@ function RendasContent() {
                   <th className="py-3 px-4 text-right">Ações</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/[0.03]">
+              <tbody className="divide-y theme-border">
                 {filteredIncomes.map((item) => (
-                  <tr key={item.id} className="hover:bg-white/[0.02] transition-colors">
-                    <td className="py-3.5 px-4 font-semibold text-zinc-200">
+                  <tr key={item.id} className="hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors">
+                    <td className="py-3.5 px-4 font-semibold theme-text-primary">
                       <div className="flex items-center gap-2">
-                        <div className="p-1 rounded-lg bg-emerald-500/10 text-emerald-400">
+                        <div className="p-1 rounded-lg bg-emerald-500/10 text-emerald-500">
                           <ArrowUpRight className="w-3.5 h-3.5" />
                         </div>
                         <span>{item.descricao}</span>
                         {item.recorrente && (
-                          <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                          <span className="text-[9px] px-1.5 py-0.5 rounded-full theme-card-elevated border theme-text-primary">
                             Recorrente
                           </span>
                         )}
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 text-zinc-400">{item.categoria}</td>
-                    <td className="py-3.5 px-4 text-zinc-400">
+                    <td className="py-3.5 px-4 theme-text-secondary">{item.categoria}</td>
+                    <td className="py-3.5 px-4 theme-text-secondary">
                       {new Date(item.dataRecebimento).toLocaleDateString('pt-BR')}
                     </td>
                     <td className="py-3.5 px-4">
                       {item.recebido ? (
-                        <span className="inline-flex items-center gap-1 text-[11px] text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+                        <span className="inline-flex items-center gap-1 text-[11px] text-emerald-500 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
                           <CheckCircle2 className="w-3 h-3" /> Recebido
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 text-[11px] text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20">
+                        <span className="inline-flex items-center gap-1 text-[11px] text-amber-500 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20">
                           <Clock className="w-3 h-3" /> Pendente
                         </span>
                       )}
                     </td>
-                    <td className="py-3.5 px-4 text-right font-bold text-emerald-400">
+                    <td className="py-3.5 px-4 text-right font-bold text-emerald-500">
                       +{formatCurrency(item.valor)}
                     </td>
                     <td className="py-3.5 px-4 text-right">
                       <button
                         onClick={() => handleDelete(item.id)}
-                        className="p-1.5 text-zinc-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-colors cursor-pointer"
+                        className="p-1.5 theme-text-muted hover:text-rose-500 hover:bg-rose-500/10 rounded-xl transition-colors cursor-pointer"
                         title="Excluir"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -209,15 +209,15 @@ function RendasContent() {
         )}
       </Card>
 
-      {/* Modal com Backlight Glow */}
+      {/* Modal Neutro */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <Card className="w-full max-w-md p-6 bg-[#14141b] border-white/[0.1] shadow-2xl relative overflow-hidden">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+          <Card className="w-full max-w-md p-6 shadow-2xl relative overflow-hidden">
             <div className="backlight-dome" />
 
             <div className="flex items-center justify-between mb-5 relative z-10">
-              <h3 className="text-base font-bold text-white">Nova Renda</h3>
-              <button onClick={() => setModalOpen(false)} className="text-zinc-500 hover:text-zinc-300">
+              <h3 className="text-base font-bold theme-text-primary">Nova Renda</h3>
+              <button onClick={() => setModalOpen(false)} className="theme-text-secondary hover:theme-text-primary">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -238,7 +238,7 @@ function RendasContent() {
                 required
               />
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Input
                   label="Data de Recebimento"
                   type="date"
@@ -256,32 +256,32 @@ function RendasContent() {
               </div>
 
               <div className="flex items-center justify-between pt-2">
-                <label className="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer">
+                <label className="flex items-center gap-2 text-xs theme-text-primary cursor-pointer">
                   <input
                     type="checkbox"
                     checked={recebido}
                     onChange={(e) => setRecebido(e.target.checked)}
-                    className="rounded bg-zinc-900 border-zinc-700 text-purple-600 focus:ring-purple-500"
+                    className="rounded"
                   />
                   <span>Já recebido</span>
                 </label>
 
-                <label className="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer">
+                <label className="flex items-center gap-2 text-xs theme-text-primary cursor-pointer">
                   <input
                     type="checkbox"
                     checked={recorrente}
                     onChange={(e) => setRecorrente(e.target.checked)}
-                    className="rounded bg-zinc-900 border-zinc-700 text-purple-600 focus:ring-purple-500"
+                    className="rounded"
                   />
                   <span>Recorrente</span>
                 </label>
               </div>
 
-              <div className="flex justify-end gap-2 pt-4 border-t border-white/[0.06]">
+              <div className="flex justify-end gap-2 pt-4 border-t theme-border">
                 <Button type="button" variant="ghost" size="sm" onClick={() => setModalOpen(false)}>
                   Cancelar
                 </Button>
-                <Button type="submit" variant="glow" size="sm" disabled={submitting}>
+                <Button type="submit" variant="primary" size="sm" disabled={submitting}>
                   {submitting ? 'Salvando...' : 'Salvar Renda'}
                 </Button>
               </div>
@@ -295,9 +295,8 @@ function RendasContent() {
 
 export default function RendasPage() {
   return (
-    <Suspense fallback={<div className="py-24 text-center text-xs text-zinc-500">Carregando rendas...</div>}>
+    <Suspense fallback={<div className="py-24 text-center text-xs theme-text-muted">Carregando rendas...</div>}>
       <RendasContent />
     </Suspense>
   );
 }
-

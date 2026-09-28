@@ -5,7 +5,22 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { apiClient } from '@/services/api-client';
-import { User, Mail, Lock, ShieldCheck, CreditCard, TrendingUp, TrendingDown, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { useTheme } from '@/components/providers/theme-provider';
+import { 
+  User, 
+  Mail, 
+  ShieldCheck, 
+  CreditCard, 
+  TrendingUp, 
+  TrendingDown, 
+  CheckCircle2, 
+  AlertCircle, 
+  Loader2, 
+  Sun,
+  Moon,
+  Check 
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface ProfileData {
   id: string;
@@ -20,6 +35,7 @@ interface ProfileData {
 }
 
 export default function PerfilPage() {
+  const { theme, setTheme } = useTheme();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -91,7 +107,7 @@ export default function PerfilPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-24 text-zinc-500">
-        <Loader2 className="w-6 h-6 animate-spin text-purple-400 mr-2" />
+        <Loader2 className="w-6 h-6 animate-spin theme-text-secondary mr-2" />
         <span className="text-xs">Carregando dados do usuário...</span>
       </div>
     );
@@ -109,70 +125,134 @@ export default function PerfilPage() {
   return (
     <div className="space-y-6 max-w-4xl">
       <div>
-        <h2 className="text-xl font-bold tracking-tight text-white">Meu Perfil</h2>
-        <p className="text-xs text-zinc-500 mt-0.5">
-          Gerencie seus dados cadastrais, segurança da conta e preferências
+        <h2 className="text-xl font-bold tracking-tight theme-text-primary">Meu Perfil</h2>
+        <p className="text-xs theme-text-secondary mt-0.5">
+          Gerencie seus dados cadastrais, segurança da conta e preferências visuais
         </p>
       </div>
 
       {/* Card de Identificação do Usuário */}
-      <Card className="bg-[#14141b] border-white/[0.06] p-6 relative overflow-hidden">
+      <Card className="p-6 relative overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 relative z-10">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-purple-600 via-fuchsia-600 to-pink-500 flex items-center justify-center text-2xl font-bold text-white shadow-glow-neon flex-shrink-0">
+            <div className="w-16 h-16 rounded-3xl theme-btn-primary flex items-center justify-center text-2xl font-bold shadow-sm flex-shrink-0">
               {initial}
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-lg font-bold text-white">{profile?.nome}</h3>
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-semibold">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="text-lg font-bold theme-text-primary">{profile?.nome}</h3>
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 text-[10px] font-semibold">
                   <ShieldCheck className="w-3 h-3" />
-                  Conta Verificada
+                  Conta Ativa & Verificada
                 </span>
               </div>
-              <p className="text-xs text-zinc-400 mt-0.5 flex items-center gap-1.5">
-                <Mail className="w-3 h-3 text-zinc-500" />
+              <p className="text-xs theme-text-secondary mt-0.5 flex items-center gap-1.5">
+                <Mail className="w-3 h-3 opacity-60" />
                 <span>{profile?.email}</span>
               </p>
-              <p className="text-[11px] text-zinc-500 mt-1">Membro desde {dataFormatada}</p>
+              <p className="text-[11px] theme-text-muted mt-1">Membro desde {dataFormatada}</p>
             </div>
           </div>
         </div>
       </Card>
 
-      {/* Grid de Estatísticas do Usuário */}
+      {/* Seletor de Tema: Apenas Noturno e Diurno */}
+      <Card className="p-6">
+        <div className="mb-4">
+          <h3 className="text-sm font-bold theme-text-primary">Aparência do Sistema</h3>
+          <p className="text-xs theme-text-secondary">Escolha entre o Modo Noturno e o Modo Diurno</p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+          {/* Card Tema Noturno */}
+          <button
+            type="button"
+            onClick={() => setTheme('dark')}
+            className={cn(
+              'p-4 rounded-2xl text-left border transition-all cursor-pointer relative flex flex-col justify-between min-h-[105px]',
+              theme === 'dark'
+                ? 'bg-white/[0.08] border-white shadow-md ring-1 ring-white/20'
+                : 'bg-white/[0.02] border-white/[0.06] hover:border-white/[0.15]'
+            )}
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded-full bg-[#09090b] border border-zinc-700 flex items-center justify-center">
+                    <Moon className="w-2.5 h-2.5 text-zinc-300" />
+                  </div>
+                  <span className="text-xs font-bold text-white">Modo Noturno (Dark)</span>
+                </div>
+                {theme === 'dark' && <Check className="w-4 h-4 text-white" />}
+              </div>
+              <p className="text-[11px] text-zinc-400 mt-2 leading-relaxed">
+                Fundo preto e grafite profundo para maior conforto visual à noite e foco total.
+              </p>
+            </div>
+          </button>
+
+          {/* Card Tema Diurno */}
+          <button
+            type="button"
+            onClick={() => setTheme('light')}
+            className={cn(
+              'p-4 rounded-2xl text-left border transition-all cursor-pointer relative flex flex-col justify-between min-h-[105px]',
+              theme === 'light'
+                ? 'bg-zinc-100 border-zinc-950 shadow-md ring-1 ring-zinc-950/20'
+                : 'bg-zinc-50/50 border-zinc-200 hover:border-zinc-300'
+            )}
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded-full bg-white border border-zinc-300 flex items-center justify-center">
+                    <Sun className="w-2.5 h-2.5 text-amber-500" />
+                  </div>
+                  <span className="text-xs font-bold text-zinc-950">Modo Diurno (Light)</span>
+                </div>
+                {theme === 'light' && <Check className="w-4 h-4 text-zinc-950" />}
+              </div>
+              <p className="text-[11px] text-zinc-600 mt-2 leading-relaxed">
+                Superfícies claras, arejadas e de alta legibilidade para ambientes iluminados.
+              </p>
+            </div>
+          </button>
+        </div>
+      </Card>
+
+      {/* Grid de Estatísticas */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="bg-[#14141b] border-white/[0.06] p-4 flex items-center gap-3">
-          <div className="p-2.5 rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
-            <CreditCard className="w-5 h-5" />
+        <Card className="p-4 flex items-center gap-3">
+          <div className="p-2.5 rounded-2xl theme-card-elevated border">
+            <CreditCard className="w-5 h-5 theme-text-primary" />
           </div>
           <div>
-            <span className="block text-[10px] text-zinc-500 uppercase tracking-wider">Cartões</span>
-            <span className="text-lg font-bold text-white">
+            <span className="block text-[10px] theme-text-secondary uppercase tracking-wider">Cartões</span>
+            <span className="text-lg font-bold theme-text-primary">
               {profile?._count?.cartoes ?? 0} ativos
             </span>
           </div>
         </Card>
 
-        <Card className="bg-[#14141b] border-white/[0.06] p-4 flex items-center gap-3">
-          <div className="p-2.5 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+        <Card className="p-4 flex items-center gap-3">
+          <div className="p-2.5 rounded-2xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
             <TrendingUp className="w-5 h-5" />
           </div>
           <div>
-            <span className="block text-[10px] text-zinc-500 uppercase tracking-wider">Receitas</span>
-            <span className="text-lg font-bold text-white">
+            <span className="block text-[10px] theme-text-secondary uppercase tracking-wider">Receitas</span>
+            <span className="text-lg font-bold theme-text-primary">
               {profile?._count?.rendas ?? 0} registradas
             </span>
           </div>
         </Card>
 
-        <Card className="bg-[#14141b] border-white/[0.06] p-4 flex items-center gap-3">
-          <div className="p-2.5 rounded-2xl bg-rose-500/10 text-rose-400 border border-rose-500/20">
+        <Card className="p-4 flex items-center gap-3">
+          <div className="p-2.5 rounded-2xl bg-rose-500/10 text-rose-500 border border-rose-500/20">
             <TrendingDown className="w-5 h-5" />
           </div>
           <div>
-            <span className="block text-[10px] text-zinc-500 uppercase tracking-wider">Despesas</span>
-            <span className="text-lg font-bold text-white">
+            <span className="block text-[10px] theme-text-secondary uppercase tracking-wider">Despesas</span>
+            <span className="text-lg font-bold theme-text-primary">
               {profile?._count?.gastos ?? 0} registradas
             </span>
           </div>
@@ -180,18 +260,18 @@ export default function PerfilPage() {
       </div>
 
       {/* Formulário de Edição */}
-      <Card className="bg-[#14141b] border-white/[0.06] p-6">
-        <h3 className="text-sm font-bold text-white mb-4">Atualizar Informações</h3>
+      <Card className="p-6">
+        <h3 className="text-sm font-bold theme-text-primary mb-4">Atualizar Informações</h3>
 
         {successMsg && (
-          <div className="p-3 mb-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs flex items-center gap-2">
+          <div className="p-3 mb-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-xs flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
             <span>{successMsg}</span>
           </div>
         )}
 
         {errorMsg && (
-          <div className="p-3 mb-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs flex items-center gap-2">
+          <div className="p-3 mb-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-500 text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span>{errorMsg}</span>
           </div>
@@ -200,7 +280,7 @@ export default function PerfilPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-medium text-zinc-400">Nome Completo</label>
+              <label className="text-xs font-medium theme-text-secondary">Nome Completo</label>
               <Input
                 type="text"
                 value={nome}
@@ -211,7 +291,7 @@ export default function PerfilPage() {
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-medium text-zinc-400">E-mail (Informativo)</label>
+              <label className="text-xs font-medium theme-text-secondary">E-mail (Informativo)</label>
               <Input
                 type="email"
                 value={profile?.email || ''}
@@ -221,11 +301,11 @@ export default function PerfilPage() {
             </div>
           </div>
 
-          <div className="pt-2 border-t border-white/[0.04]">
-            <h4 className="text-xs font-semibold text-zinc-300 mb-2">Alterar Senha de Acesso (Opcional)</h4>
+          <div className="pt-2 border-t theme-border">
+            <h4 className="text-xs font-semibold theme-text-primary mb-2">Alterar Senha de Acesso (Opcional)</h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
-                <label className="text-xs font-medium text-zinc-400">Nova Senha</label>
+                <label className="text-xs font-medium theme-text-secondary">Nova Senha</label>
                 <Input
                   type="password"
                   value={senha}
@@ -235,7 +315,7 @@ export default function PerfilPage() {
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-medium text-zinc-400">Confirmar Nova Senha</label>
+                <label className="text-xs font-medium theme-text-secondary">Confirmar Nova Senha</label>
                 <Input
                   type="password"
                   value={confirmSenha}
@@ -246,8 +326,8 @@ export default function PerfilPage() {
             </div>
           </div>
 
-          <div className="flex justify-end pt-4 border-t border-white/[0.06]">
-            <Button type="submit" variant="glow" size="lg" disabled={submitting}>
+          <div className="flex justify-end pt-4 border-t theme-border">
+            <Button type="submit" variant="primary" size="lg" disabled={submitting}>
               {submitting ? 'Salvando...' : 'Salvar Alterações'}
             </Button>
           </div>

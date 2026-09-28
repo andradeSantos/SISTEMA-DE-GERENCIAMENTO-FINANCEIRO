@@ -9,6 +9,7 @@ import { registerSchema, type RegisterDto } from '@app-finance/shared';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Layers } from 'lucide-react';
 
 export default function SignUpPage() {
@@ -54,16 +55,21 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center p-4 bg-[#0a0a0c]">
-      <Card className="w-full max-w-md p-8 bg-[#14141b] border-white/[0.08] shadow-2xl relative overflow-hidden">
+    <div className="min-h-screen w-full flex items-center justify-center p-4 bg-[#09090b] theme-titanium:bg-[#0a0d14] theme-light:bg-[#f4f4f5] transition-colors duration-200">
+      <Card className="w-full max-w-md p-6 sm:p-8 bg-[#121216] dark:bg-[#121216] theme-titanium:bg-[#121824] theme-light:bg-white border-white/[0.08] theme-light:border-zinc-200 shadow-2xl relative overflow-hidden">
         <div className="backlight-dome" style={{ top: '-40px', bottom: 'auto' }} />
 
+        {/* <div className="flex items-center justify-between mb-4 relative z-10">
+          <div />
+          <ThemeToggle />
+        </div> */}
+
         <div className="flex flex-col items-center mb-8 text-center relative z-10">
-          <div className="w-12 h-12 rounded-2xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center text-white shadow-glow-purple mb-4">
-            <Layers className="w-6 h-6 text-purple-400" />
+          <div className="w-12 h-12 rounded-2xl bg-white/[0.08] border border-white/[0.12] flex items-center justify-center text-white shadow-sm mb-4">
+            <Layers className="w-6 h-6 text-white" />
           </div>
-          <h1 className="text-xl font-bold tracking-tight text-white">Criar Nova Conta</h1>
-          <p className="text-xs text-zinc-500 mt-1">Junte-se à experiência premium do App Finance</p>
+          <h1 className="text-xl font-bold tracking-tight text-white theme-light:text-zinc-950">Criar Nova Conta</h1>
+          <p className="text-xs text-zinc-400 theme-light:text-zinc-500 mt-1">Junte-se à experiência premium do App Finance</p>
         </div>
 
         {serverError && (
@@ -102,7 +108,7 @@ export default function SignUpPage() {
 
           <Button
             type="submit"
-            variant="glow"
+            variant="primary"
             className="w-full mt-2"
             disabled={isSubmitting}
           >
@@ -112,7 +118,7 @@ export default function SignUpPage() {
 
         <div className="mt-6 text-center text-xs text-zinc-500 relative z-10">
           Já possui uma conta?{' '}
-          <Link href="/sign-in" className="text-purple-400 hover:text-purple-300 font-medium">
+          <Link href="/sign-in" className="text-zinc-300 hover:text-white theme-light:text-zinc-800 theme-light:hover:text-zinc-950 font-medium underline">
             Entrar
           </Link>
         </div>

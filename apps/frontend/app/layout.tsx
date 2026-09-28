@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { ThemeProvider } from '@/components/providers/theme-provider';
 
 export const metadata: Metadata = {
   title: 'App Finance | Portfolio & Wealth Management',
@@ -13,8 +14,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR" className="dark h-full">
-      <body className="min-h-full flex flex-col bg-[#0a0a0c] text-zinc-100 antialiased selection:bg-pink-500/30 selection:text-pink-200">
-        {children}
+      <body className="min-h-full flex flex-col theme-canvas antialiased transition-colors duration-200">
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

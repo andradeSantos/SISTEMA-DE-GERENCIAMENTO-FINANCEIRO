@@ -12,8 +12,8 @@ export function PillButton({ className, active, children, ...props }: PillButton
       className={cn(
         'inline-flex items-center justify-center rounded-full px-4 py-1.5 text-xs font-medium transition-all duration-200 cursor-pointer',
         active
-          ? 'bg-white/[0.12] text-white border border-white/[0.2] shadow-sm font-semibold'
-          : 'bg-[#14141b]/80 text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.05] border border-white/[0.05]',
+          ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-sm font-semibold'
+          : 'bg-transparent theme-text-secondary hover:theme-text-primary hover:bg-black/[0.04] dark:hover:bg-white/[0.06]',
         className
       )}
       {...props}

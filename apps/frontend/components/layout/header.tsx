@@ -4,8 +4,10 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { MonthNavigator } from '@/components/dashboard/month-navigator';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { apiClient } from '@/services/api-client';
-import { Bell, Search, LogOut } from 'lucide-react';
+import { LogOut, Menu } from 'lucide-react';
+import { useMobileMenu } from '@/components/providers/mobile-menu-provider';
 
 interface UserProfile {
   id: string;
@@ -16,6 +18,7 @@ interface UserProfile {
 
 export function Header() {
   const router = useRouter();
+  const { openMenu } = useMobileMenu();
   const [user, setUser] = useState<UserProfile | null>(null);
 
   useEffect(() => {
@@ -54,65 +57,74 @@ export function Header() {
   const initial = displayName.charAt(0).toUpperCase();
 
   return (
-    <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/[0.06]">
-      {/* Saudação Personalizada em Português */}
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-          <span>Bem-vindo(a),</span>
-          <span className="bg-gradient-to-r from-pink-300 via-purple-300 to-white bg-clip-text text-transparent">
-            {displayName}
-          </span>
-        </h1>
-        <p className="text-xs text-zinc-500 mt-0.5">
-          Aqui está a visão geral do seu patrimônio e finanças
-        </p>
+    <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b theme-border transition-colors duration-200">
+      {/* Linha Superior: Botão Mobile Hamburguer + Saudação */}
+      <div className="flex items-center justify-between lg:justify-start gap-3">
+        <div className="flex items-center gap-3">
+          {/* Botão de Hambúrguer */}
+          <button
+            onClick={openMenu}
+            className="lg:hidden p-2 rounded-2xl theme-card border theme-text-secondary hover:theme-text-primary transition-colors cursor-pointer"
+            title="Abrir menu de navegação"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+
+          <div>
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight theme-text-primary flex items-center gap-1.5 flex-wrap">
+              <span className="theme-text-secondary font-normal">Olá,</span>
+              <span className="theme-text-primary font-semibold">{displayName}</span>
+            </h1>
+            <p className="text-[11px] sm:text-xs theme-text-secondary mt-0.5">
+              Visão geral do seu patrimônio e fluxo financeiro
+            </p>
+          </div>
+        </div>
+
+        {/* Em telas menores: ThemeToggle e Avatar */}
+        <div className="flex items-center gap-2 lg:hidden">
+          <ThemeToggle />
+          <Link
+            href="/perfil"
+            className="w-8 h-8 rounded-full theme-btn-primary flex items-center justify-center text-xs font-bold shadow-sm"
+            title="Ver meu perfil"
+          >
+            {initial}
+          </Link>
+        </div>
       </div>
 
       {/* Controles da Direita */}
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-wrap items-center justify-between sm:justify-end gap-2.5">
         {/* Navegador em Pílula */}
         <MonthNavigator />
 
-        {/* Campo de Busca Minimalista */}
-        {/* <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#14141b] border border-white/[0.08] text-xs text-zinc-400 focus-within:border-purple-500/50">
-          <Search className="w-3.5 h-3.5 text-zinc-500" />
-          <input
-            type="text"
-            placeholder="Buscar transações..."
-            className="bg-transparent border-none text-zinc-200 placeholder:text-zinc-600 focus:outline-none w-36"
-          />
-        </div> */}
+        {/* Seletor de Tema Noturno / Diurno (Desktop) */}
+        <div className="hidden lg:block">
+          <ThemeToggle />
+        </div>
 
-        {/* Notificações */}
-        {/* <button
-          className="w-8 h-8 rounded-full bg-[#14141b] border border-white/[0.08] flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-colors relative cursor-pointer"
-          title="Notificações"
-        >
-          <Bell className="w-3.5 h-3.5" />
-          <span className="w-1.5 h-1.5 rounded-full bg-pink-500 absolute top-2 right-2" />
-        </button> */}
-
-        {/* Avatar e Perfil Clicável */}
+        {/* Avatar e Perfil (Desktop) */}
         <Link
           href="/perfil"
-          className="flex items-center gap-2.5 pl-1.5 hover:opacity-85 transition-opacity cursor-pointer group"
+          className="hidden lg:flex items-center gap-2.5 pl-1.5 hover:opacity-85 transition-opacity cursor-pointer group"
           title="Ver meu perfil"
         >
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center text-xs font-bold text-white shadow-glow-purple">
+          <div className="w-8 h-8 rounded-full theme-btn-primary flex items-center justify-center text-xs font-bold shadow-sm">
             {initial}
           </div>
-          <div className="hidden lg:block text-left text-xs">
-            <span className="block font-semibold text-zinc-200 group-hover:text-white transition-colors">
+          <div className="text-left text-xs">
+            <span className="block font-semibold theme-text-primary group-hover:underline transition-colors">
               {displayName}
             </span>
-            <span className="block text-[10px] text-zinc-500">Conta Ativa</span>
+            <span className="block text-[10px] theme-text-muted">Conta Ativa</span>
           </div>
         </Link>
 
         {/* Botão de Logout */}
         <button
           onClick={handleLogout}
-          className="w-8 h-8 rounded-full bg-[#14141b] border border-white/[0.08] flex items-center justify-center text-zinc-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
+          className="w-8 h-8 rounded-full theme-card border flex items-center justify-center theme-text-muted hover:text-rose-500 hover:bg-rose-500/10 transition-colors cursor-pointer"
           title="Sair da conta"
         >
           <LogOut className="w-3.5 h-3.5" />

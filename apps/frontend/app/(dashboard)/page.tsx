@@ -104,21 +104,21 @@ function DashboardContent() {
           <meta charset="utf-8">
           <title>Relatório Financeiro - ${nomeMes} de ${ano}</title>
           <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 30px; color: #1f2937; background: #fff; }
-            .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #8b5cf6; padding-bottom: 20px; margin-bottom: 25px; }
-            .header h1 { margin: 0; font-size: 22px; color: #111827; }
-            .header p { margin: 4px 0 0; font-size: 13px; color: #6b7280; }
-            .badge { display: inline-block; padding: 4px 12px; border-radius: 9999px; background: #f3e8ff; color: #7e22ce; font-size: 12px; font-weight: bold; }
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 30px; color: #18181b; background: #fff; }
+            .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #18181b; padding-bottom: 20px; margin-bottom: 25px; }
+            .header h1 { margin: 0; font-size: 22px; color: #09090b; }
+            .header p { margin: 4px 0 0; font-size: 13px; color: #71717a; }
+            .badge { display: inline-block; padding: 4px 12px; border-radius: 9999px; background: #f4f4f5; color: #09090b; border: 1px solid #e4e4e7; font-size: 12px; font-weight: bold; }
             .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
-            .metric-card { padding: 16px; border-radius: 12px; background: #f9fafb; border: 1px solid #e5e7eb; }
-            .metric-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; margin-bottom: 6px; }
+            .metric-card { padding: 16px; border-radius: 12px; background: #fafafa; border: 1px solid #e4e4e7; }
+            .metric-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #71717a; margin-bottom: 6px; }
             .metric-value { font-size: 20px; font-weight: bold; }
             .text-emerald { color: #059669; }
             .text-rose { color: #e11d48; }
-            .section-title { font-size: 15px; font-weight: bold; color: #111827; margin: 25px 0 10px; border-left: 3px solid #8b5cf6; padding-left: 8px; }
+            .section-title { font-size: 15px; font-weight: bold; color: #09090b; margin: 25px 0 10px; border-left: 3px solid #09090b; padding-left: 8px; }
             table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 20px; }
-            th { background: #f3f4f6; color: #4b5563; font-weight: 600; text-align: left; padding: 8px 12px; border-bottom: 1px solid #d1d5db; font-size: 11px; text-transform: uppercase; }
-            .footer { margin-top: 40px; padding-top: 15px; border-top: 1px solid #e5e7eb; font-size: 11px; color: #9ca3af; text-align: center; }
+            th { background: #f4f4f5; color: #52525b; font-weight: 600; text-align: left; padding: 8px 12px; border-bottom: 1px solid #e4e4e7; font-size: 11px; text-transform: uppercase; }
+            .footer { margin-top: 40px; padding-top: 15px; border-top: 1px solid #e4e4e7; font-size: 11px; color: #a1a1aa; text-align: center; }
             @media print {
               body { padding: 0; }
               @page { margin: 15mm; }
@@ -133,7 +133,7 @@ function DashboardContent() {
             </div>
             <div style="text-align: right;">
               <span class="badge">${nomeMes} / ${ano}</span>
-              <p style="font-size: 11px; color: #9ca3af; margin-top: 5px;">Emitido em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}</p>
+              <p style="font-size: 11px; color: #71717a; margin-top: 5px;">Emitido em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}</p>
             </div>
           </div>
 
@@ -207,23 +207,23 @@ function DashboardContent() {
 
   return (
     <div className="space-y-6">
-      {/* Barra Superior de Ações: Botão Exportar PDF + Botão Nova Transação */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      {/* Barra de Ações: Botão Exportar PDF + Botão Nova Transação */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         {/* Botão de Exportar Resumo em PDF */}
         <button
           type="button"
           onClick={handleExportPdf}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#14141b] border border-white/[0.08] hover:border-purple-500/40 hover:bg-white/[0.04] text-xs font-medium text-zinc-200 shadow-sm transition-all cursor-pointer active:scale-[0.98]"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl theme-card border text-xs font-medium theme-text-primary shadow-sm transition-all cursor-pointer active:scale-[0.98] self-start sm:self-auto hover:bg-black/[0.04] dark:hover:bg-white/[0.05]"
           title="Exportar demonstrativo financeiro em PDF"
         >
-          <FileDown className="w-4 h-4 text-pink-400" />
+          <FileDown className="w-4 h-4 theme-text-secondary" />
           <span>Exportar Resumo (PDF)</span>
         </button>
 
-        {/* Botão de Ação Primária em Destaque Neon Glow */}
+        {/* Botão Primário Monocromático de Alto Contraste */}
         <div className="flex items-center gap-3">
           <Link href="/gastos">
-            <Button variant="glow" size="sm" className="shadow-glow-neon">
+            <Button variant="primary" size="sm" className="shadow-sm">
               <PlusCircle className="w-3.5 h-3.5" />
               <span>Nova Transação</span>
             </Button>
@@ -232,16 +232,16 @@ function DashboardContent() {
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center py-24 text-zinc-500">
-          <Loader2 className="w-6 h-6 animate-spin text-purple-400 mr-2" />
+        <div className="flex items-center justify-center py-24 theme-text-muted">
+          <Loader2 className="w-6 h-6 animate-spin theme-text-secondary mr-2" />
           <span className="text-xs">Carregando métricas financeiras reais...</span>
         </div>
       ) : (
         <>
-          {/* Grid Superior de 3 Colunas Idêntico à Bíblia Visual */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-            {/* Coluna 1: Total Holding + Card com Backlight Glow Neon */}
-            <div className="space-y-5">
+          {/* Grid Superior de 1 Coluna em Mobile -> 3 Colunas em Desktop */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {/* Coluna 1: Total Holding + Card com Domo de Luz Difusa */}
+            <div className="space-y-5 md:col-span-2 lg:col-span-1">
               <TotalHoldingCard
                 saldo={resumo.saldo}
                 totalReceitas={resumo.totalReceitas}
@@ -250,18 +250,18 @@ function DashboardContent() {
               <InsightsGlowCard />
             </div>
 
-            {/* Coluna 2: Watchlist de Categorias Reais */}
+            {/* Coluna 2: Watchlist de Categorias */}
             <div className="flex flex-col">
               <CategoryWatchlist data={categories} />
             </div>
 
-            {/* Coluna 3: Meus Cartões Reais */}
+            {/* Coluna 3: Meus Cartões */}
             <div className="flex flex-col">
               <CardsPreviewWidget cards={cards} />
             </div>
           </div>
 
-          {/* Seção Intermediária: Gráfico de Evolução com Curva SVG Baseada nas Transações Reais */}
+          {/* Gráfico de Evolução com Curva SVG Metálica Neutra */}
           <PerformanceChart
             saldo={resumo.saldo}
             evolucaoMensal={evolucao}
@@ -269,7 +269,7 @@ function DashboardContent() {
             anoSelecionado={ano}
           />
 
-          {/* Seção Inferior: Transações Recentes Reais com Toggle Instantâneo */}
+          {/* Transações Recentes com Tabela Responsiva */}
           <RecentTransactions items={transacoes} onTogglePago={handleTogglePago} />
         </>
       )}
@@ -279,7 +279,7 @@ function DashboardContent() {
 
 export default function DashboardPage() {
   return (
-    <Suspense fallback={<div className="py-24 text-center text-xs text-zinc-500">Carregando painel...</div>}>
+    <Suspense fallback={<div className="py-24 text-center text-xs theme-text-muted">Carregando painel...</div>}>
       <DashboardContent />
     </Suspense>
   );

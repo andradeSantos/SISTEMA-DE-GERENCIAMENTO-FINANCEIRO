@@ -17,11 +17,12 @@ export function Button({
   const baseStyles = 'inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none disabled:opacity-50 disabled:pointer-events-none cursor-pointer';
 
   const variants = {
-    primary: 'bg-zinc-100 text-zinc-950 hover:bg-white rounded-2xl active:scale-[0.98]',
-    glow: 'bg-glow-primary text-white shadow-glow-neon hover:brightness-110 rounded-2xl active:scale-[0.98] font-semibold',
-    secondary: 'bg-white/[0.05] text-zinc-200 hover:bg-white/[0.08] border border-white/[0.08] rounded-2xl active:scale-[0.98]',
-    ghost: 'bg-transparent text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] rounded-2xl',
-    pill: 'bg-white/[0.04] text-zinc-300 hover:text-white hover:bg-white/[0.08] border border-white/[0.06] rounded-full text-xs font-semibold',
+    // Botão primário de alto contraste (branco no dark, preto no light)
+    primary: 'theme-btn-primary rounded-2xl active:scale-[0.98] font-semibold shadow-sm',
+    glow: 'theme-btn-primary rounded-2xl active:scale-[0.98] font-semibold shadow-sm ring-1 ring-black/10 dark:ring-white/20',
+    secondary: 'theme-card border hover:theme-text-primary rounded-2xl active:scale-[0.98]',
+    ghost: 'bg-transparent theme-text-secondary hover:theme-text-primary hover:bg-black/[0.04] dark:hover:bg-white/[0.05] rounded-2xl',
+    pill: 'theme-card border rounded-full text-xs font-semibold',
   };
 
   const sizes = {

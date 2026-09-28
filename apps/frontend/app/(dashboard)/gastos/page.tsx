@@ -132,59 +132,59 @@ function GastosContent() {
 
   return (
     <div className="space-y-6">
-      {/* Header com métricas no padrão da referência */}
+      {/* Header com métricas */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+          <h2 className="text-xl font-bold tracking-tight theme-text-primary flex items-center gap-2 flex-wrap">
             <span>Gastos e Despesas</span>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-400 font-semibold border border-rose-500/20">
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-500 font-semibold border border-rose-500/20">
               -{formatCurrency(total)}
             </span>
           </h2>
-          <p className="text-xs text-zinc-500 mt-0.5">
+          <p className="text-xs theme-text-secondary mt-0.5">
             Total pago: {formatCurrency(totalPago)} • Controle de faturas e parcelas
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          {/* Filtros em Pílula Idênticos à Referência */}
-          <div className="inline-flex items-center gap-1 p-1 rounded-full bg-[#14141b] border border-white/[0.06]">
-            <PillButton active={filterStatus === 'all'} onClick={() => setFilterStatus('all')} className="px-3 py-1">
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Filtros em Pílula */}
+          <div className="inline-flex items-center gap-1 p-1 rounded-full theme-card-elevated border">
+            <PillButton active={filterStatus === 'all'} onClick={() => setFilterStatus('all')} className="px-2.5 sm:px-3 py-1">
               Todas
             </PillButton>
-            <PillButton active={filterStatus === 'pago'} onClick={() => setFilterStatus('pago')} className="px-3 py-1">
+            <PillButton active={filterStatus === 'pago'} onClick={() => setFilterStatus('pago')} className="px-2.5 sm:px-3 py-1">
               Pagas
             </PillButton>
-            <PillButton active={filterStatus === 'pendente'} onClick={() => setFilterStatus('pendente')} className="px-3 py-1">
+            <PillButton active={filterStatus === 'pendente'} onClick={() => setFilterStatus('pendente')} className="px-2.5 sm:px-3 py-1">
               Pendentes
             </PillButton>
-            <PillButton active={filterStatus === 'parcelado'} onClick={() => setFilterStatus('parcelado')} className="px-3 py-1">
+            <PillButton active={filterStatus === 'parcelado'} onClick={() => setFilterStatus('parcelado')} className="px-2.5 sm:px-3 py-1">
               Parceladas
             </PillButton>
           </div>
 
-          <Button variant="glow" size="sm" onClick={() => setModalOpen(true)}>
+          <Button variant="primary" size="sm" onClick={() => setModalOpen(true)}>
             <PlusCircle className="w-3.5 h-3.5" />
             <span>Nova Despesa</span>
           </Button>
         </div>
       </div>
 
-      {/* Tabela Dark Estilizada */}
-      <Card className="bg-[#14141b] border-white/[0.06] p-0 overflow-hidden">
+      {/* Tabela Dark/Light com Scroll Touch */}
+      <Card className="p-0 overflow-hidden">
         {loading ? (
-          <div className="flex items-center justify-center py-20 text-zinc-500">
-            <Loader2 className="w-5 h-5 animate-spin text-purple-400 mr-2" />
+          <div className="flex items-center justify-center py-20 theme-text-muted">
+            <Loader2 className="w-5 h-5 animate-spin theme-text-secondary mr-2" />
             <span className="text-xs">Carregando despesas...</span>
           </div>
         ) : filteredExpenses.length === 0 ? (
-          <div className="text-center py-20 text-zinc-500 text-xs">
+          <div className="text-center py-20 theme-text-muted text-xs">
             Nenhuma despesa encontrada para os filtros selecionados.
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-white/[0.06] bg-white/[0.02] text-zinc-400 uppercase tracking-wider text-[10px]">
+          <div className="overflow-x-auto scrollbar-thin">
+            <table className="w-full text-left text-xs min-w-[700px]">
+              <thead className="border-b theme-border theme-text-secondary uppercase tracking-wider text-[10px]">
                 <tr>
                   <th className="py-3 px-4">Status</th>
                   <th className="py-3 px-4">Descrição</th>
@@ -195,9 +195,9 @@ function GastosContent() {
                   <th className="py-3 px-4 text-right">Ações</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/[0.03]">
+              <tbody className="divide-y theme-border">
                 {filteredExpenses.map((item) => (
-                  <tr key={item.id} className="hover:bg-white/[0.02] transition-colors">
+                  <tr key={item.id} className="hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors">
                     <td className="py-3.5 px-4">
                       <button
                         onClick={() => handleTogglePago(item.id)}
@@ -205,44 +205,44 @@ function GastosContent() {
                         title={item.pago ? 'Paga (Clique para alternar)' : 'Pendente (Clique para alternar)'}
                       >
                         {item.pago ? (
-                          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                          <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                         ) : (
-                          <Circle className="w-4 h-4 text-zinc-600 hover:text-zinc-400" />
+                          <Circle className="w-4 h-4 theme-text-muted hover:theme-text-primary" />
                         )}
                       </button>
                     </td>
-                    <td className="py-3.5 px-4 font-semibold text-zinc-200">
+                    <td className="py-3.5 px-4 font-semibold theme-text-primary">
                       <div className="flex items-center gap-2">
-                        <div className="p-1 rounded-lg bg-rose-500/10 text-rose-400">
+                        <div className="p-1 rounded-lg bg-rose-500/10 text-rose-500">
                           <ArrowDownRight className="w-3.5 h-3.5" />
                         </div>
                         <span>{item.descricao}</span>
                         {item.totalParcelas > 1 && (
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-pink-500/10 text-pink-400 border border-pink-500/20 font-bold">
+                          <span className="text-[10px] px-2 py-0.5 rounded-full theme-card-elevated border theme-text-primary font-bold">
                             {item.parcelaAtual}/{item.totalParcelas}
                           </span>
                         )}
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 text-zinc-400">
+                    <td className="py-3.5 px-4 theme-text-secondary">
                       <span className="capitalize">{item.metodoPagamento.toLowerCase().replace('_', ' ')}</span>
                       {item.cartao && (
-                        <span className="block text-[11px] text-purple-400 flex items-center gap-1 mt-0.5">
+                        <span className="block text-[11px] theme-text-primary flex items-center gap-1 mt-0.5">
                           <CreditCard className="w-3 h-3 inline" /> {item.cartao.nome}
                         </span>
                       )}
                     </td>
-                    <td className="py-3.5 px-4 text-zinc-400">{item.categoria}</td>
-                    <td className="py-3.5 px-4 text-zinc-400">
+                    <td className="py-3.5 px-4 theme-text-secondary">{item.categoria}</td>
+                    <td className="py-3.5 px-4 theme-text-secondary">
                       {new Date(item.dataPagamento).toLocaleDateString('pt-BR')}
                     </td>
-                    <td className="py-3.5 px-4 text-right font-bold text-rose-400">
+                    <td className="py-3.5 px-4 text-right font-bold text-rose-500">
                       -{formatCurrency(item.valor)}
                     </td>
                     <td className="py-3.5 px-4 text-right">
                       <button
                         onClick={() => handleDelete(item.id, item.totalParcelas > 1)}
-                        className="p-1.5 text-zinc-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-colors cursor-pointer"
+                        className="p-1.5 theme-text-muted hover:text-rose-500 hover:bg-rose-500/10 rounded-xl transition-colors cursor-pointer"
                         title="Excluir"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -256,15 +256,15 @@ function GastosContent() {
         )}
       </Card>
 
-      {/* Modal com Backlight Glow */}
+      {/* Modal Neutro */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <Card className="w-full max-w-md p-6 bg-[#14141b] border-white/[0.1] shadow-2xl relative overflow-hidden max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+          <Card className="w-full max-w-md p-6 shadow-2xl relative overflow-hidden max-h-[90vh] overflow-y-auto">
             <div className="backlight-dome" />
 
             <div className="flex items-center justify-between mb-5 relative z-10">
-              <h3 className="text-base font-bold text-white">Nova Despesa</h3>
-              <button onClick={() => setModalOpen(false)} className="text-zinc-500 hover:text-zinc-300">
+              <h3 className="text-base font-bold theme-text-primary">Nova Despesa</h3>
+              <button onClick={() => setModalOpen(false)} className="theme-text-secondary hover:theme-text-primary">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -285,7 +285,7 @@ function GastosContent() {
                 required
               />
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Input
                   label="Data do Gasto"
                   type="date"
@@ -304,13 +304,13 @@ function GastosContent() {
 
               {/* Método de Pagamento */}
               <div className="space-y-1.5 text-left">
-                <label className="block text-xs font-medium text-zinc-400">
+                <label className="block text-xs font-medium theme-text-secondary">
                   Método de Pagamento
                 </label>
                 <select
                   value={metodoPagamento}
                   onChange={(e) => setMetodoPagamento(e.target.value as MetodoPagamento)}
-                  className="w-full rounded-2xl bg-[#0f0f13] border border-white/[0.08] px-4 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-purple-500/80"
+                  className="w-full rounded-2xl theme-card border px-4 py-2.5 text-sm theme-text-primary focus:outline-none cursor-pointer"
                 >
                   <option value={MetodoPagamento.PIX}>PIX</option>
                   <option value={MetodoPagamento.CARTAO_CREDITO}>Cartão de Crédito</option>
@@ -325,13 +325,13 @@ function GastosContent() {
               {(metodoPagamento === MetodoPagamento.CARTAO_CREDITO ||
                 metodoPagamento === MetodoPagamento.CARTAO_DEBITO) && (
                 <div className="space-y-1.5 text-left">
-                  <label className="block text-xs font-medium text-zinc-400">
+                  <label className="block text-xs font-medium theme-text-secondary">
                     Vincular Cartão
                   </label>
                   <select
                     value={cartaoId}
                     onChange={(e) => setCartaoId(e.target.value)}
-                    className="w-full rounded-2xl bg-[#0f0f13] border border-white/[0.08] px-4 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-purple-500/80"
+                    className="w-full rounded-2xl theme-card border px-4 py-2.5 text-sm theme-text-primary focus:outline-none cursor-pointer"
                   >
                     <option value="">Nenhum cartão selecionado</option>
                     {cards.map((c) => (
@@ -343,9 +343,9 @@ function GastosContent() {
                 </div>
               )}
 
-              {/* Parcelamento com simulação em tempo real */}
+              {/* Parcelamento */}
               <div className="space-y-1.5 text-left">
-                <label className="block text-xs font-medium text-zinc-400">
+                <label className="block text-xs font-medium theme-text-secondary">
                   Total de Parcelas
                 </label>
                 <input
@@ -354,20 +354,20 @@ function GastosContent() {
                   max="48"
                   value={totalParcelas}
                   onChange={(e) => setTotalParcelas(parseInt(e.target.value) || 1)}
-                  className="w-full rounded-2xl bg-[#0f0f13] border border-white/[0.08] px-4 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-purple-500/80"
+                  className="w-full rounded-2xl theme-card border px-4 py-2.5 text-sm theme-text-primary focus:outline-none"
                 />
                 {totalParcelas > 1 && (
-                  <p className="text-[11px] text-zinc-400">
+                  <p className="text-[11px] theme-text-secondary">
                     Serão gerados {totalParcelas} lançamentos mensais automáticos de {formatCurrency(valor)}.
                   </p>
                 )}
               </div>
 
-              <div className="flex justify-end gap-2 pt-4 border-t border-white/[0.06]">
+              <div className="flex justify-end gap-2 pt-4 border-t theme-border">
                 <Button type="button" variant="ghost" size="sm" onClick={() => setModalOpen(false)}>
                   Cancelar
                 </Button>
-                <Button type="submit" variant="glow" size="sm" disabled={submitting}>
+                <Button type="submit" variant="primary" size="sm" disabled={submitting}>
                   {submitting ? 'Salvando...' : 'Salvar Despesa'}
                 </Button>
               </div>
@@ -381,9 +381,8 @@ function GastosContent() {
 
 export default function GastosPage() {
   return (
-    <Suspense fallback={<div className="py-24 text-center text-xs text-zinc-500">Carregando gastos...</div>}>
+    <Suspense fallback={<div className="py-24 text-center text-xs theme-text-muted">Carregando gastos...</div>}>
       <GastosContent />
     </Suspense>
   );
 }
-
