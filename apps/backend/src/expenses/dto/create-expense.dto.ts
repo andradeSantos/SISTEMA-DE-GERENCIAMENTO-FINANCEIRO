@@ -24,6 +24,7 @@ export class CreateExpenseDto {
     description: 'Valor monetário da despesa (ou de cada parcela)',
   })
   @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0.01, { message: 'O valor da despesa deve ser maior que zero (mínimo R$ 0,01)' })
   @Type(() => Number)
   valor: number;
 

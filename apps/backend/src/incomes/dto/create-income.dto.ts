@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsDateString, IsBoolean, IsOptional } from 'class-validator';
+import { IsString, IsNumber, IsDateString, IsBoolean, IsOptional, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
@@ -15,6 +15,7 @@ export class CreateIncomeDto {
     description: 'Valor monetário recebido',
   })
   @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0.01, { message: 'O valor da renda deve ser maior que zero (mínimo R$ 0,01)' })
   @Type(() => Number)
   valor: number;
 
